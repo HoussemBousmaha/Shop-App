@@ -1,11 +1,14 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/product.dart';
 import '../screens/product_details_screen.dart';
 import '../providers/products.dart';
+
+enum FilterOptions {
+  favorites,
+  all,
+}
 
 class ProductsOverviewScreen extends StatefulWidget {
   const ProductsOverviewScreen({Key? key}) : super(key: key);
@@ -15,6 +18,8 @@ class ProductsOverviewScreen extends StatefulWidget {
 }
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
+  bool showFavoritesOnly = false;
+
   @override
   Widget build(BuildContext context) {
     // this is the main screen
@@ -23,25 +28,36 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       appBar: AppBar(
         title: const Text('My Shop'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.favorite),
-            onPressed: () {},
-          )
+          PopupMenuButton(
+            onSelected: (FilterOptions value) {
+              setState(() {
+                if (value == FilterOptions.favorites) {
+                  showFavoritesOnly = true;
+                } else {
+                  showFavoritesOnly = false;
+                }
+              });
+            },
+            itemBuilder: (_) => [
+              const PopupMenuItem(child: Text('only favorites'), value: FilterOptions.favorites),
+              const PopupMenuItem(child: Text('show all'), value: FilterOptions.all),
+            ],
+          ),
         ],
       ),
       // gridview.builder optimizes long grid views with multiple items
       // where we do not know how many items we have.
       // It renders items that are on the screen only.
-      body: const ProductsGrid(),
+      body: ProductsGrid(showFavoritesOnly),
     );
   }
 }
 
 // ProductsGrid is GridView of ProductGridItems
 class ProductsGrid extends StatelessWidget {
-  const ProductsGrid({
-    Key? key,
-  }) : super(key: key);
+  const ProductsGrid(this.showFavoritesOnly, {Key? key}) : super(key: key);
+
+  final bool showFavoritesOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +65,10 @@ class ProductsGrid extends StatelessWidget {
     // whenever a change happend in that class, this build function will be called.
     // and therefor we fetch the last data from our Products class.
     // here we are listening to changes in the list of products. (items)
-    final products = Provider.of<Products>(context).items.where((product) => !product.isFavorite).toList();
+    final products = !showFavoritesOnly
+        ? Provider.of<Products>(context).items
+        : Provider.of<Products>(context).items.where((product) => product.isFavorite).toList();
+
     return GridView.builder(
       padding: const EdgeInsets.all(10.0),
       itemCount: products.length,
