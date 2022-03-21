@@ -18,7 +18,7 @@ class ProductsOverviewScreen extends StatefulWidget {
 }
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
-  bool showFavoritesOnly = false;
+  bool _showFavoritesOnly = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +32,9 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
             onSelected: (FilterOptions value) {
               setState(() {
                 if (value == FilterOptions.favorites) {
-                  showFavoritesOnly = true;
+                  _showFavoritesOnly = true;
                 } else {
-                  showFavoritesOnly = false;
+                  _showFavoritesOnly = false;
                 }
               });
             },
@@ -48,7 +48,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       // gridview.builder optimizes long grid views with multiple items
       // where we do not know how many items we have.
       // It renders items that are on the screen only.
-      body: ProductsGrid(showFavoritesOnly),
+      body: ProductsGrid(_showFavoritesOnly),
     );
   }
 }
@@ -65,9 +65,7 @@ class ProductsGrid extends StatelessWidget {
     // whenever a change happend in that class, this build function will be called.
     // and therefor we fetch the last data from our Products class.
     // here we are listening to changes in the list of products. (items)
-    final products = !showFavoritesOnly
-        ? Provider.of<Products>(context).items
-        : Provider.of<Products>(context).items.where((product) => product.isFavorite).toList();
+    final products = showFavoritesOnly ? Provider.of<Products>(context).favoriteItems : Provider.of<Products>(context).items;
 
     return GridView.builder(
       padding: const EdgeInsets.all(10.0),
