@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop/providers/cart.dart';
 import './screens/products_overview_screen.dart';
 import './screens/product_details_screen.dart';
 import './providers/products.dart';
@@ -17,11 +18,12 @@ class MyApp extends StatelessWidget {
     // you can then listen to its changes in child widgets
     // and whenever that class updates the child widgets which are listening
     // will get rebuild.
-    return ChangeNotifierProvider(
-      // setting up a provider to the MyApp widget.
-      create: (context) {
-        return Products();
-      },
+    return MultiProvider(
+      providers: [
+        // setting up a provider to the MyApp widget.
+        ChangeNotifierProvider(create: (context) => Products()),
+        ChangeNotifierProvider(create: (context) => Cart())
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
