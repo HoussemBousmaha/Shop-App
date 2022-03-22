@@ -23,14 +23,14 @@ class OrderItem {
 // 4- the time we stored the order.
 
 class Orders with ChangeNotifier {
-  final List<OrderItem> _orders = [];
+  final List<OrderItem> _items = [];
 
   List<OrderItem> get items {
-    return [..._orders];
+    return [..._items];
   }
 
   void addOrder(List<CartItem> cartItems, double total) {
-    _orders.insert(
+    _items.insert(
       0,
       OrderItem(
         id: DateTime.now().toString(),
