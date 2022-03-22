@@ -178,7 +178,7 @@ class ProductGridItem extends StatelessWidget {
               arguments: product.id,
             );
           },
-          child: Image.network(product.imageUrl, fit: BoxFit.cover), // image of a product.
+          child: Image.network(product.imageUrl, fit: BoxFit.fitHeight), // image of a product.
         ),
       ),
     );
