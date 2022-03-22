@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/cart.dart';
 import '../providers/product.dart';
-import '../screens/product_details_screen.dart';
 import '../providers/products.dart';
+import './product_details_screen.dart';
+import './cart_screen.dart';
 
 enum FilterOptions {
   favorites,
@@ -42,6 +44,21 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
               const PopupMenuItem(child: Text('only favorites'), value: FilterOptions.favorites),
               const PopupMenuItem(child: Text('show all'), value: FilterOptions.all),
             ],
+          ),
+          Consumer<Cart>(
+            builder: (_, cart, child) {
+              return Badge(
+                child: child!,
+                value: cart.totalNumberProducts.toString(),
+                color: cart.items.isEmpty ? null : Colors.purple,
+              );
+            },
+            child: IconButton(
+              icon: const Icon(Icons.card_travel),
+              onPressed: () {
+                Navigator.of(context).pushNamed(CartScreen.routeName);
+              },
+            ),
           ),
         ],
       ),
@@ -101,6 +118,7 @@ class ProductGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
+    final cart = Provider.of<Cart>(context, listen: false);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -141,7 +159,9 @@ class ProductGridItem extends StatelessWidget {
           // this is add product to the card button.
           trailing: IconButton(
             icon: const Icon(Icons.shopping_cart),
-            onPressed: () {},
+            onPressed: () {
+              cart.addCartItem(product.id, product.price, product.title);
+            },
             color: Colors.deepOrange,
           ),
         ),
@@ -161,6 +181,43 @@ class ProductGridItem extends StatelessWidget {
           child: Image.network(product.imageUrl, fit: BoxFit.cover), // image of a product.
         ),
       ),
+    );
+  }
+}
+
+class Badge extends StatelessWidget {
+  const Badge({
+    Key? key,
+    required this.child,
+    required this.value,
+    this.color,
+  }) : super(key: key);
+
+  final Widget child;
+  final String value;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        child,
+        Positioned(
+          right: 8,
+          top: 8,
+          child: Container(
+            padding: const EdgeInsets.all(2.0),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: color ?? Colors.deepOrange),
+            constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+            child: Text(
+              value,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 10),
+            ),
+          ),
+        )
+      ],
     );
   }
 }

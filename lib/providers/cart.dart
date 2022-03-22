@@ -40,6 +40,23 @@ class Cart with ChangeNotifier {
     return {..._items};
   }
 
+  double get totalPrice {
+    double total = 0;
+    _items.forEach((key, cartItem) {
+      total += cartItem.price * cartItem.quantity;
+    });
+    return total;
+  }
+
+  int get totalNumberProducts {
+    int total = 0;
+    _items.forEach((key, value) {
+      total += value.quantity;
+    });
+
+    return total;
+  }
+
   // this function adds a new CartItem to the map
   // if the CartItem exists, it modifies its product quantity.
   // otherwise it adds a new entry to the map having the newly created CartItem.
@@ -70,5 +87,7 @@ class Cart with ChangeNotifier {
       );
       _items.putIfAbsent(productId, () => newCartItem);
     }
+
+    notifyListeners();
   }
 }
