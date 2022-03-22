@@ -10,7 +10,7 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cart = Provider.of<Cart>(context, listen: false);
+    final cart = Provider.of<Cart>(context);
     return Scaffold(
       appBar: AppBar(title: const Text('Your cart')),
       body: Column(
@@ -48,6 +48,7 @@ class CartScreen extends StatelessWidget {
               itemCount: cart.items.length,
               itemBuilder: (_, index) => CartListItem(
                 cart.items.values.toList()[index],
+                cart.items.keys.toList()[index],
               ),
             ),
           ),
@@ -59,32 +60,48 @@ class CartScreen extends StatelessWidget {
 
 class CartListItem extends StatelessWidget {
   const CartListItem(
-    this.cart, {
+    this.cartItem,
+    this.productId, {
     Key? key,
   }) : super(key: key);
 
-  final CartItem cart;
+  final CartItem cartItem;
+  final String productId;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListTile(
-          leading: CircleAvatar(
-            child: FittedBox(
-              child: Text(
-                '\$${cart.price.toStringAsFixed(2)}',
-                style: const TextStyle(fontSize: 10),
+    return Dismissible(
+      key: ValueKey(cartItem.id),
+      background: Container(
+        color: Theme.of(context).errorColor,
+        child: const Icon(Icons.delete, color: Colors.white, size: 40),
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20),
+        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+      ),
+      direction: DismissDirection.endToStart,
+      onDismissed: (direction) {
+        Provider.of<Cart>(context, listen: false).removeCartItem(productId);
+      },
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListTile(
+            leading: CircleAvatar(
+              child: FittedBox(
+                child: Text(
+                  '\$${cartItem.price.toStringAsFixed(2)}',
+                  style: const TextStyle(fontSize: 10),
+                ),
               ),
             ),
-          ),
-          title: Text(cart.title),
-          subtitle: Text('Total: \$${(cart.price * cart.quantity).toStringAsFixed(2)}'),
-          trailing: Text(
-            'x${cart.quantity}',
-            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            title: Text(cartItem.title),
+            subtitle: Text('Total: \$${(cartItem.price * cartItem.quantity).toStringAsFixed(2)}'),
+            trailing: Text(
+              'x${cartItem.quantity}',
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
           ),
         ),
       ),
