@@ -34,7 +34,7 @@ class Cart with ChangeNotifier {
   // because if we have a product in a cart, we only want to increase its quantity.
 
   // a map from product id to cart item.
-  final Map<String, CartItem> _items = {};
+  Map<String, CartItem> _items = {};
 
   Map<String, CartItem> get items {
     return {..._items};
@@ -93,6 +93,11 @@ class Cart with ChangeNotifier {
 
   void removeCartItem(String productId) {
     _items.remove(productId);
+    notifyListeners();
+  }
+
+  void clearCart() {
+    _items = {};
     notifyListeners();
   }
 }
