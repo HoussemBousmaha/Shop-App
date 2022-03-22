@@ -29,12 +29,7 @@ class Orders with ChangeNotifier {
     return [..._orders];
   }
 
-  void addOrder(List<CartItem> cartItems) {
-    double total = 0;
-    for (var cartItem in cartItems) {
-      total += cartItem.price * cartItem.quantity;
-    }
-
+  void addOrder(List<CartItem> cartItems, double total) {
     _orders.insert(
       0,
       OrderItem(
