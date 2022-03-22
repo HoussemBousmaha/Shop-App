@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import '../providers/orders.dart';
+import '../widgets/drawer.dart';
 
 class OrderScreen extends StatelessWidget {
   const OrderScreen({Key? key}) : super(key: key);
@@ -20,6 +21,7 @@ class OrderScreen extends StatelessWidget {
         itemCount: orders.items.length,
         itemBuilder: (_, index) => OrderListItem(orders.items[index]),
       ),
+      drawer: const AppDrawer(),
     );
   }
 }
@@ -40,7 +42,7 @@ class OrderListItem extends StatelessWidget {
         children: [
           ListTile(
             title: Text('\$${order.amount}'),
-            subtitle: Text(DateFormat('dd MM yyyy hh:mm').format(order.storingTime)),
+            subtitle: Text(DateFormat('dd/MM/yyyy hh:mm').format(order.storingTime)),
             trailing: IconButton(
               icon: const Icon(Icons.expand_more),
               onPressed: () {},

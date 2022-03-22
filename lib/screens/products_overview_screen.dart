@@ -4,8 +4,11 @@ import 'package:provider/provider.dart';
 import '../providers/cart.dart';
 import '../providers/product.dart';
 import '../providers/products.dart';
+
 import './product_details_screen.dart';
 import './cart_screen.dart';
+
+import '../widgets/drawer.dart';
 
 enum FilterOptions {
   favorites,
@@ -66,6 +69,10 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       // where we do not know how many items we have.
       // It renders items that are on the screen only.
       body: ProductsGrid(_showFavoritesOnly),
+
+      // this is a side drawer to switch between
+      // products overview screen and orders screen.
+      drawer: const AppDrawer(),
     );
   }
 }
