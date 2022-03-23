@@ -11,8 +11,6 @@ class ProductDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final product = ModalRoute.of(context)?.settings.arguments as Product;
-    // the productId is passed from the ProductGridItem to the ProductDetailsScreen
-    // via the constructor then we use the provider package to find the item by its Id.
 
     return Scaffold(
       appBar: AppBar(

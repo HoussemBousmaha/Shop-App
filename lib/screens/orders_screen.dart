@@ -26,7 +26,7 @@ class OrderScreen extends StatelessWidget {
   }
 }
 
-class OrderListItem extends StatelessWidget {
+class OrderListItem extends StatefulWidget {
   const OrderListItem(
     this.order, {
     Key? key,
@@ -35,19 +35,54 @@ class OrderListItem extends StatelessWidget {
   final OrderItem order;
 
   @override
+  State<OrderListItem> createState() => _OrderListItemState();
+}
+
+class _OrderListItemState extends State<OrderListItem> {
+  bool _expanded = false;
+
+  @override
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.all(10.0),
       child: Column(
         children: [
           ListTile(
-            title: Text('\$${order.amount}'),
-            subtitle: Text(DateFormat('dd/MM/yyyy hh:mm').format(order.storingTime)),
+            title: Text('\$${widget.order.amount}'),
+            subtitle: Text(DateFormat('dd/MM/yyyy hh:mm').format(widget.order.storingTime)),
             trailing: IconButton(
-              icon: const Icon(Icons.expand_more),
-              onPressed: () {},
+              icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
+              onPressed: () {
+                setState(() {
+                  _expanded = !_expanded;
+                });
+              },
             ),
           ),
+          if (_expanded)
+            Container(
+              padding: const EdgeInsets.all(8.0),
+              height: widget.order.items.length * 50,
+              child: ListView(
+                children: widget.order.items
+                    .map(
+                      (product) => Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(product.title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                            Text(
+                              '${product.quantity}x \$${product.price.toStringAsFixed(2)}',
+                              style: const TextStyle(fontSize: 18, color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
         ],
       ),
     );
