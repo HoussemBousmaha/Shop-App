@@ -81,6 +81,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
 class ProductsGrid extends StatelessWidget {
   const ProductsGrid(this.showFavoritesOnly, {Key? key}) : super(key: key);
 
+  // this property is used to filter products.
   final bool showFavoritesOnly;
 
   @override
@@ -139,6 +140,7 @@ class ProductGridItem extends StatelessWidget {
           backgroundColor: Colors.black87,
 
           // this is the switch favorite status button.
+          // Consumer to listen to changes in the isFavorite state.
           leading: Consumer<Product>(
             builder: (_, product, child) => IconButton(
               icon: Icon(product.isFavorite ? Icons.favorite : Icons.favorite_border),
@@ -167,7 +169,8 @@ class ProductGridItem extends StatelessWidget {
           trailing: IconButton(
             icon: const Icon(Icons.shopping_cart),
             onPressed: () {
-              cart.addCartItem(product.id, product.price, product.title);
+              // adding a new cart item having this product.
+              cart.addCartItem(product);
             },
             color: Colors.deepOrange,
           ),
@@ -180,9 +183,11 @@ class ProductGridItem extends StatelessWidget {
           // it will take us to the product details screen
           // where we will show the details of each product.
           onTap: () {
+            // going to the product details screen and passing the product in the fly
+            // to display its information the product details screen.
             Navigator.of(context).pushNamed(
               ProductDetailsScreen.routeName,
-              arguments: product.id,
+              arguments: product,
             );
           },
           child: Image.network(product.imageUrl, fit: BoxFit.fitHeight), // image of a product.
@@ -192,6 +197,7 @@ class ProductGridItem extends StatelessWidget {
   }
 }
 
+// this is the little widget at the top-right.
 class Badge extends StatelessWidget {
   const Badge({
     Key? key,

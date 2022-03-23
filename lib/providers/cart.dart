@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 
+import './product.dart';
+
 // this is simple:
 // a CartItem contains only one "Product" with different quantities.
 // Ex: we can have a cartItem that has 1 product "Shoes" with 2 quantities (i.e 2 pairs of shoes).
@@ -60,16 +62,16 @@ class Cart with ChangeNotifier {
   // this function adds a new CartItem to the map
   // if the CartItem exists, it modifies its product quantity.
   // otherwise it adds a new entry to the map having the newly created CartItem.
-  void addCartItem(String productId, double price, String title) {
+  void addCartItem(Product product) {
     // quantity is always 1, this means we can only add one item at a time.
 
     // checking if a product is existing in the cart item.
     // if it is we increase its quantity.
-    if (_items.containsKey(productId)) {
+    if (_items.containsKey(product.id)) {
       // change the quantity:
       // i.e: replace the oldCartItem with the new one. that have (quantity + 1) products.
       _items.update(
-        productId,
+        product.id,
         (oldCartItem) => CartItem(
           id: oldCartItem.id,
           title: oldCartItem.title,
@@ -81,11 +83,11 @@ class Cart with ChangeNotifier {
       // add a new entry product.
       final CartItem newCartItem = CartItem(
         id: DateTime.now().toString(), // this is the id of the cart item.
-        title: title,
+        title: product.title,
         quantity: 1,
-        price: price,
+        price: product.price,
       );
-      _items.putIfAbsent(productId, () => newCartItem);
+      _items.putIfAbsent(product.id, () => newCartItem);
     }
 
     notifyListeners();

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/products.dart';
+import '../providers/product.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   const ProductDetailsScreen({
@@ -11,10 +10,9 @@ class ProductDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productId = ModalRoute.of(context)?.settings.arguments as String;
+    final product = ModalRoute.of(context)?.settings.arguments as Product;
     // the productId is passed from the ProductGridItem to the ProductDetailsScreen
     // via the constructor then we use the provider package to find the item by its Id.
-    final product = Provider.of<Products>(context, listen: false).findById(productId);
 
     return Scaffold(
       appBar: AppBar(
