@@ -127,6 +127,17 @@ class ProductGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
+    final snackBar = SnackBar(
+      // duration: const Duration(milliseconds: 600),
+      content: Text('${product.title} added to the cart!'),
+      action: SnackBarAction(
+        textColor: Colors.white,
+        label: 'UNDO',
+        onPressed: () {
+          cart.removeCartItem(product.id);
+        },
+      ),
+    );
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -171,6 +182,10 @@ class ProductGridItem extends StatelessWidget {
             onPressed: () {
               // adding a new cart item having this product.
               cart.addCartItem(product);
+
+              // Find the ScaffoldMessenger in the widget tree
+              // and use it to show a SnackBar.
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
             },
             color: Colors.deepOrange,
           ),

@@ -19,7 +19,7 @@ import './product.dart';
 class CartItem {
   final String id; // the id of the cart item not the product it belongs to.
   final String title;
-  final int quantity;
+  int quantity;
   final double price;
 
   CartItem({
@@ -94,7 +94,10 @@ class Cart with ChangeNotifier {
   }
 
   void removeCartItem(String productId) {
-    _items.remove(productId);
+    _items[productId]?.quantity -= 1;
+    if (_items[productId]?.quantity == 0) {
+      _items.remove(productId);
+    }
     notifyListeners();
   }
 
