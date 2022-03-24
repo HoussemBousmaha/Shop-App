@@ -87,8 +87,27 @@ class CartListItem extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
       ),
       direction: DismissDirection.endToStart,
-      onDismissed: (direction) {
-        Provider.of<Cart>(context, listen: false).removeCartItem(productId);
+      confirmDismiss: (direction) async {
+        return showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Are you sure?'),
+            content: const Text('if you swipe this item, it will get removed Permanently.'),
+            actions: [
+              TextButton(
+                  child: const Text('Cancel'),
+                  onPressed: () {
+                    Navigator.of(ctx).pop(false);
+                  }),
+              TextButton(
+                  child: const Text('Continue'),
+                  onPressed: () {
+                    Navigator.of(ctx).pop(true);
+                    Provider.of<Cart>(context, listen: false).removeAllProductsFromCartItem(productId);
+                  }),
+            ],
+          ),
+        );
       },
       child: Card(
         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),

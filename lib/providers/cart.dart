@@ -93,11 +93,16 @@ class Cart with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeCartItem(String productId) {
+  void removeSingleProductFromCartItem(String productId) {
     _items[productId]?.quantity -= 1;
     if (_items[productId]?.quantity == 0) {
       _items.remove(productId);
     }
+    notifyListeners();
+  }
+
+  void removeAllProductsFromCartItem(String productId) {
+    _items.remove(productId);
     notifyListeners();
   }
 

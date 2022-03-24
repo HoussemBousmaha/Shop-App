@@ -128,13 +128,13 @@ class ProductGridItem extends StatelessWidget {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
     final snackBar = SnackBar(
-      // duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 600),
       content: Text('${product.title} added to the cart!'),
       action: SnackBarAction(
-        textColor: Colors.white,
+        textColor: Colors.blue,
         label: 'UNDO',
         onPressed: () {
-          cart.removeCartItem(product.id);
+          cart.removeSingleProductFromCartItem(product.id);
         },
       ),
     );
