@@ -19,9 +19,46 @@ class _EditProductScreenState extends State<EditProductScreen> {
         child: Form(
           child: ListView(
             children: [
-              TextFormField(
-                decoration: const InputDecoration(labelText: 'Title'),
-                textInputAction: TextInputAction.next,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Title',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                      borderSide: const BorderSide(),
+                    ),
+                  ),
+                  textInputAction: TextInputAction.next,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Price',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                      borderSide: const BorderSide(),
+                    ),
+                  ),
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Description',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                      borderSide: const BorderSide(),
+                    ),
+                  ),
+                  maxLines: 3,
+                  keyboardType: TextInputType.multiline,
+                ),
               ),
             ],
           ),
