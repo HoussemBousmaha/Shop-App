@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/product.dart';
 import '../providers/products.dart';
+import './edit_product_screen.dart';
 
 class ManageProductsScreen extends StatelessWidget {
   const ManageProductsScreen({Key? key}) : super(key: key);
@@ -62,7 +63,9 @@ class ManageProductsListItem extends StatelessWidget {
           children: [
             IconButton(
               icon: const Icon(Icons.edit),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed(EditProductScreen.routeName);
+              },
               color: Theme.of(context).primaryColor,
             ),
             IconButton(
