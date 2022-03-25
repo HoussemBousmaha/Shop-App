@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/product.dart';
 import '../providers/products.dart';
+import '../widgets/drawer.dart';
 import './edit_product_screen.dart';
 
 class ManageProductsScreen extends StatelessWidget {
@@ -14,6 +15,7 @@ class ManageProductsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final products = Provider.of<Products>(context);
     return Scaffold(
+      drawer: const AppDrawer(),
       appBar: AppBar(
         title: const Text('Your products'),
         centerTitle: true,
@@ -63,7 +65,9 @@ class ManageProductsListItem extends StatelessWidget {
           children: [
             IconButton(
               icon: const Icon(Icons.edit),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed(EditProductScreen.routeName, arguments: product.id);
+              },
               color: Theme.of(context).primaryColor,
             ),
             IconButton(
