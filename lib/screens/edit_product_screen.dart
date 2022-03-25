@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../providers/product.dart';
+
 class EditProductScreen extends StatefulWidget {
   const EditProductScreen({Key? key}) : super(key: key);
 
@@ -11,6 +13,15 @@ class EditProductScreen extends StatefulWidget {
 
 class _EditProductScreenState extends State<EditProductScreen> {
   final _imageUrlController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  Product _editedProduct = Product(
+    id: '',
+    title: '',
+    price: 0,
+    description: '',
+    imageUrl: '',
+  );
 
   @override
   void dispose() {
@@ -18,13 +29,27 @@ class _EditProductScreenState extends State<EditProductScreen> {
     super.dispose();
   }
 
+  void _saveForm() {
+    _formKey.currentState?.save();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Edit Product')),
+      appBar: AppBar(
+        title: const Text('Edit Product'),
+        actions: [
+          IconButton(
+              icon: const Icon(Icons.save),
+              onPressed: () {
+                _saveForm();
+              }),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
+          key: _formKey,
           child: ListView(
             children: [
               Padding(
@@ -38,6 +63,16 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     ),
                   ),
                   textInputAction: TextInputAction.next,
+                  onSaved: (value) {
+                    if (value == null) return;
+                    _editedProduct = Product(
+                      title: value,
+                      price: _editedProduct.price,
+                      description: _editedProduct.description,
+                      imageUrl: _editedProduct.imageUrl,
+                      id: '',
+                    );
+                  },
                 ),
               ),
               Padding(
@@ -52,6 +87,16 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   ),
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
+                  onSaved: (value) {
+                    if (value == null) return;
+                    _editedProduct = Product(
+                      title: _editedProduct.title,
+                      price: double.parse(value),
+                      description: _editedProduct.description,
+                      imageUrl: _editedProduct.imageUrl,
+                      id: '',
+                    );
+                  },
                 ),
               ),
               Padding(
@@ -66,11 +111,22 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   ),
                   maxLines: 3,
                   keyboardType: TextInputType.multiline,
+                  onSaved: (value) {
+                    if (value == null) return;
+                    _editedProduct = Product(
+                      title: _editedProduct.title,
+                      price: _editedProduct.price,
+                      description: value,
+                      imageUrl: _editedProduct.imageUrl,
+                      id: '',
+                    );
+                  },
                 ),
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
+                  // the picture
                   Container(
                     width: 100,
                     height: 100,
@@ -80,6 +136,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         ? const Text('Enter a url')
                         : FittedBox(child: Image.network(_imageUrlController.text, fit: BoxFit.cover)),
                   ),
+                  // the url text form field.
                   Expanded(
                     child: TextFormField(
                       decoration: const InputDecoration(labelText: 'Image Url'),
@@ -88,6 +145,19 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       controller: _imageUrlController,
                       onEditingComplete: () {
                         setState(() {});
+                      },
+                      onFieldSubmitted: (_) {
+                        _saveForm();
+                      },
+                      onSaved: (value) {
+                        if (value == null) return;
+                        _editedProduct = Product(
+                          title: _editedProduct.title,
+                          price: _editedProduct.price,
+                          description: _editedProduct.description,
+                          imageUrl: value,
+                          id: '',
+                        );
                       },
                     ),
                   ),
