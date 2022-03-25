@@ -21,7 +21,7 @@ class ManageProductsScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              // ...
+              Navigator.of(context).pushNamed(EditProductScreen.routeName);
             },
           ),
         ],
@@ -63,9 +63,7 @@ class ManageProductsListItem extends StatelessWidget {
           children: [
             IconButton(
               icon: const Icon(Icons.edit),
-              onPressed: () {
-                Navigator.of(context).pushNamed(EditProductScreen.routeName);
-              },
+              onPressed: () {},
               color: Theme.of(context).primaryColor,
             ),
             IconButton(
